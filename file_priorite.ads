@@ -8,7 +8,7 @@ with Ada.Unchecked_Deallocation;
 
 generic 
      
-    type Donnee is private; -- Donnée sauvée en file
+    type Donnee is private; -- Donnée sauvée en file. Dan ce TP, Donnee = Arbre
     type Priorite is private; -- La priorité corressepondant; La donnée la
                                 -- plus prioritaire est celui dont la priorite
                                 -- est minimale.
@@ -35,9 +35,10 @@ package File_priorite is
     
     -- Retirer l'élement le moins priorité, C'est celui dont la priorité est
     -- maximale. Sa donnée est sauvée en D.
+    -- Exception : Raise Erreur_File_Vide si la file est videe
     procedure Sortir (F: in out File, D: out Donnee);
     
-    -- pour tester
+    -- Exception : Raise Erreur_File_Vide si F est Vide 
     procedure Afficher (F: in File );
 
 
