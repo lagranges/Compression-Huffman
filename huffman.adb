@@ -11,9 +11,9 @@ package body Huffman is
     
     procedure Libere_Noeud is new Ada.Uncheck_Deallocation(Noeud,Arbre);
 
-    function Creer_Feuille(C: Character ) return Arbre is
+    function Creer_Feuille(E: Element ) return Arbre is
     begin
-        return new Noeud'(Val => C,
+        return new Noeud'(Val => E,
                             Fg => null,
                             Fd => null);
     end Creer_Feuille;
