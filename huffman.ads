@@ -19,7 +19,7 @@ package Huffman is
     function Arbre_Vide return Arbre;
 
     -- Creer une Noeud de Feuille qui contient caractere C
-    function Creer_Feuille(C: Character) return Arbre;
+    function Creer_Feuille(E: Element) return Arbre;
 
     -- contruire une arbre avec fils gauche A et fils droit B
     -- renvoie la racine
