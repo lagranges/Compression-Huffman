@@ -1,6 +1,7 @@
-with Ada.Text_IO; use Ada.Text_IO;
-with file_priorite; use file_priorite;
-with Ada.Streams.Stream_IO; use Ada.Streams.Streams_IO;
+with Ada.Text_IO;
+with file_priorite;
+with Ada.Streams.Stream_IO;
+
 
 -- Ce package permets contruit une arbre Huffman à partir 
 -- d'un fichier des caractères ou d'un fichier compressé.
@@ -12,6 +13,7 @@ package Huffman is
 
     type Arbre is private;
 
+    Erreur_File_Vide: exception;
 
     procedure Libere_Arbre(A : in out Arbre);
     
@@ -34,7 +36,6 @@ package Huffman is
     -- Exception: file n'exist pas
     function Creer_Arbre(Nom_Fichier : in String) return Arbre;
 
-    function Creer_Arbre() return Arbre;
     -- pour tester 
     -- afficher comment ? lire en Test_Arbre
     procedure Afficher(A : in Arbre);

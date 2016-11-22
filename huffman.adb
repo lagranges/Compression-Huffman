@@ -1,15 +1,32 @@
 with Ada.Text_IO, Ada.Unchecked_Deallocation; use Ada.Text_IO;
 with Ada.Streams.Stream_IO; use Ada.Streams.Stream_IO;
-
+with file_priorite; use file_priorite;
 package body Huffman is
     
     type Noeud is record
         Val: Element; -- égale null si ce n'est pas une feuille
-        Fd, Fg: Arbre;  -- Fils gauche, Fils droit
+        Fg, Fd: Arbre;  -- Fils gauche, Fils droit
     end record;
 
     
-    procedure Libere_Noeud is new Ada.Uncheck_Deallocation(Noeud,Arbre);
+    procedure Liberer is new Ada.Uncheck_Deallocation(Noeud,Arbre);
+    
+    procedure Libere_Arbre(A: in out Arbre) is 
+        Tmp: Arbre;
+    begin
+        while Tmp /= null loop
+            Tmp := A;
+            A := A.Suiv;
+            Liberer(Tmp);
+        end loop;
+    end Libere_Arbre; 
+
+    
+    function Arbre_Vide return Arbre is
+    begin
+        return null;
+    end Arbre_Vide;
+
 
     function Creer_Feuille(E: Element ) return Arbre is
     begin
@@ -17,6 +34,40 @@ package body Huffman is
                             Fg => null,
                             Fd => null);
     end Creer_Feuille;
+
+
+    function Creer_Arbre (A,B: Arbre) return Arbre is 
+    begin 
+        return new Noeud'(Val => null,
+                            Fg => A,
+                            Fd => B);
+    end Creer_Arbre;
+
+
+    function Creer_Arbre (F: in File) return Arbre is 
+       Tmp1, Tmp2, Tmp : Arbre ;
+       P1,P2: Priorite;
+    begin
+       if F = null then
+          raise Erreur_File_Vide;
+       else if Longeur_File(F) = 1 then
+          Sortir(F,Tmp1);
+          return new Cellule'(Val => null, Fg => null, Fd => Tmp1);
+       else 
+          P1 := F.all.P;
+          P2 := F.all.Suiv.all.P;
+          Tmp1 := Sortir(F,Tmp1);
+          Tmp2 := Sortir(F,Tmp2);
+          Tmp := Creer_Arbre(Tmp1,Tmp2);
+          if Longeur_File(F) = 2 then
+            return Creer_Arbre(Tmp1,Tmp2);
+          else 
+            Entrer(F,Tmp,P1+P2);
+            return Creer_Arbre(F);
+          end if;
+       end if;
+       end if;
+    end Creer_Arbre;
 
 
     function Creer_Arbre(Nom_Fichier : String) return Arbre is 
