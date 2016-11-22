@@ -36,8 +36,9 @@ package Code_Binaire is
     -- Supprimer les n premiere bit et les retourn en Code D
     -- Exception: Raise erreur_code_court
     procedure Supprimer_nTete(C: in out Code; n: in Integer; D: out Code);
- 
-
+    
+    -- Compare deux fonction, Retourne true si'ils sont la meme suite de bit 
+    function Compare_Code (C: in Code; D: in Code) return Boolean;
 private 
     type Cellule;
     type Code is access Cellule;

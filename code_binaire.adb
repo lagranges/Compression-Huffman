@@ -106,6 +106,12 @@ package body Code_Binaire is
         D := Tmp;
     end Supprimer_nTete;
 
-    
+   function Compare_Code(C: in Code; D: in Code) return boolean is 
+   begin
+       if C = null and D = null then return true; end if;
+       if C = null and D /= null then return false; end if;
+       if C /= null and D = null then return false; end if;
+       return (Compare_Code(C.Suiv,D.Suiv));
+   end ;
 end Code_Binaire;
      
