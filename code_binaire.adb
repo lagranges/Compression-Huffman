@@ -39,8 +39,7 @@ package body Code_Binaire is
         Tmp: Code := C;
     begin
         while Tmp/=null loop
-            Put(Tmp.Val);
-            Put(" ");
+            Put(Tmp.Val,3);
             Tmp := Tmp.Suiv;
         end loop;
         New_Line;
@@ -70,10 +69,13 @@ package body Code_Binaire is
     procedure Inserer_Code_Queue(C: in out Code; D: in Code) is
         Tmp: Code := C;
     begin
-        while Tmp /= null loop
-            Tmp := Tmp.Suiv;
-        end loop;
-        Tmp := D;
+        if C = null then C := D;
+        else
+            while Tmp.Suiv /= null loop
+                Tmp := Tmp.Suiv;
+            end loop;
+            Tmp.Suiv := D;
+        end if;
     end Inserer_Code_Queue;
 
 
