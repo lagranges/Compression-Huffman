@@ -31,12 +31,12 @@ package File_priorite is
     function Est_Vide (F: in File) return Boolean;
     
     -- Ajouter un élement
-    procedure Entrer (F: in out File, D: in Donnee, P: in Priorite);
+    procedure Entrer (F: in out File ; D: in Donnee ; P: in Priorite);
     
     -- Retirer l'élement le moins priorité, C'est celui dont la priorité est
     -- maximale. Sa donnée est sauvée en D.
     -- Exception : Raise Erreur_File_Vide si la file est videe
-    procedure Sortir (F: in out File, D: out Donnee);
+    procedure Sortir (F: in out File ; D: out Donnee);
     
     -- Exception : Raise Erreur_File_Vide si F est Vide 
     procedure Afficher (F: in File );
