@@ -17,7 +17,7 @@ package Dico is
 
     function Traduire(D: in Dictionnaire; Char: in Character) return Code;
 
-    function Traduire(D: in Dictinnaire; C: in Code) return Character;
+    function Traduire(D: in Dictionnaire; C: in Code) return Character;
     
     procedure Afficher(D: in Dictionnaire);
 

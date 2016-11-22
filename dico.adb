@@ -1,13 +1,13 @@
-with Ada.Text_IO, code;
-use Ada.Text_IO, code; 
+
+with Ada.Text_IO, Ada.Integer_Text_IO,code_binaire; use Ada.Text_IO, Ada.Integer_Text_IO,code_binaire;
 with Ada.Unchecked_Deallocation;
 
 package body Dico is
     
-    procedure Liberer is new Ada.Uncheked_Deallocation.Liberer(Cellule, Dictionnaire);
+    procedure Liberer is new Ada.Unchecked_Deallocation(Cellule, Dictionnaire);
 
 
-    function Creer_Dictionnaire is 
+    function Creer_Dictionnaire return Dictionnaire is 
     begin 
         return null;
     end Creer_Dictionnaire;
@@ -29,30 +29,43 @@ package body Dico is
         D := new Cellule'(Char,C,D);
     end Ajouter;
 
-    procedure Traduire(D:in Dictionnaire; Char:in Character) returnCode is
+    function Traduire(D:in Dictionnaire; Char:in Character) return Code is
         Tmp: Dictionnaire := D;
     begin
         while Tmp /= null loop
             if Tmp.Char = Char then 
                 return Tmp.C;
             end if;
+                Tmp := Tmp.Suiv;
         end loop;
-        raise Errer_Sans_Existe; 
+        raise Erreur_Sans_Existe; 
     end Traduire;
 
       
-    procedure Traduire(D:in Dictionnaire; Char:in Character) returnCode is
+    function Traduire(D:in Dictionnaire; C: Code) return Character is
         Tmp: Dictionnaire := D;
     begin
         while Tmp /= null loop
-            if Tmp.Char = Char then 
-                return Tmp.C;
+            if Compare_Code(Tmp.C,C) then 
+                return Tmp.Char;
             end if;
+            Tmp := Tmp.Suiv;
         end loop;
-        raise Errer_Sans_Existe; 
+        raise Erreur_Sans_Existe; 
     end Traduire; 
 
-     
+   procedure Afficher(D: in Dictionnaire) is 
+        Tmp: Dictionnaire := D;
+    begin
+        while Tmp /= null loop
+           Put(Tmp.Char);
+           Put(":");
+           Afficher(Tmp.C);
+           Put("          ");   
+           Tmp := Tmp.Suiv;
+        end loop;
+        New_Line;
+    end Afficher; 
 end Dico; 
    
      
