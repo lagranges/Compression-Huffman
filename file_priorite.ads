@@ -13,7 +13,7 @@ generic
     with procedure Afficher(P:  in Priorite);
     -- Signature d'Operateur
     with function "<" (P1 : in Priorite; P2 : in Priorite) return Boolean;
-
+    with function "+" (P1 : in Priorite; P2 : in Priorite) return Priorite;
 package File_priorite is
     
     -- Exception levée par ce package
@@ -23,6 +23,9 @@ package File_priorite is
     
     -- Retourne une file null;
     function Creer_File return File;
+    
+    -- Retourne la taille de file
+    function Longeur_File(F: File) return Integer;
 
     -- Liberer la file
     procedure Liberer_File(F: in out File);

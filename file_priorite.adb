@@ -25,6 +25,19 @@ package body file_priorite is
     end Liberer_File;
 
 
+    function Longeur_File (F: in File ) return Integer is
+        Tmp : File := F;
+        L : Integer:= 0;
+    begin
+        while Tmp /= null loop
+            Tmp := Tmp.Suiv;
+            L := L + 1;
+        end loop;
+        return L;
+    end Longeur_File;
+
+
+
     function Est_Vide (F: in File) return Boolean is 
     begin
         return F = null;
