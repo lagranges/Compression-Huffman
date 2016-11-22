@@ -39,7 +39,7 @@ package File_priorite is
     -- Retirer l'élement le moins priorité, C'est celui dont la priorité est
     -- maximale. Sa donnée est sauvée en D.
     -- Exception : Raise Erreur_File_Vide si la file est videe
-    procedure Sortir (F: in out File ; D: out Donnee);
+    procedure Sortir (F: in out File ; D: out Donnee; P: out Priorite);
     
     -- Exception : Raise Erreur_File_Vide si F est Vide 
     procedure Afficher (F: in File );

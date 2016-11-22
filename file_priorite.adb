@@ -58,13 +58,15 @@ package body file_priorite is
         end if;
     end Entrer;
 
-    procedure Sortir (F: in out File; D: out Donnee) is
+    procedure Sortir (F: in out File; D: out Donnee; P: out Priorite) is
         Tmp : File := F;
     begin
         if F = null then
             raise Erreur_File_Vide; 
         else
             F := F.Suiv;
+            D := Tmp.Val;
+            P := Tmp.P;
             Liberer(Tmp);
         end if;
     end Sortir;
