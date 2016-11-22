@@ -1,10 +1,7 @@
 -- file_priorite.ads
--- File_priorite: une liste chainée
--- Policy de Sorti d'un élement: sotir l'élement le plus prorité
+-- File_priorite: une liste chainée trié (l'élement le plus prioriaire au début)
+-- Policy de Sorti d'un élement: sotir l'élement le plus prorité = le premiere l'element
 -- Exception sur Entrer/Sortir
-
-with Ada.Text_Io; use Ada.Text_Io;
-with Ada.Unchecked_Deallocation;
 
 generic 
      
@@ -12,8 +9,10 @@ generic
     type Priorite is private; -- La priorité corressepondant; La donnée la
                                 -- plus prioritaire est celui dont la priorite
                                 -- est minimale.
+    with procedure Afficher(D : in Donnee);
+    with procedure Afficher(P:  in Priorite);
     -- Signature d'Operateur
-    with function "<" (P1 : in Priorite, P2 : in Priorite) return Boolean;
+    with function "<" (P1 : in Priorite; P2 : in Priorite) return Boolean;
 
 package File_priorite is
     
@@ -21,11 +20,12 @@ package File_priorite is
     Erreur_File_Vide: Exception;
 
     type File is private;
-
-    procedure Libere is new Ada.Unchecked_Deallocation (Cellule, File);
     
-    -- renvoyer une file null;
+    -- Retourne une file null;
     function Creer_File return File;
+
+    -- Liberer la file
+    procedure Liberer_File(F: in out File);
     
     -- true si File est videe
     function Est_Vide (F: in File) return Boolean;
@@ -51,4 +51,4 @@ private
         P: Priorite;
         Suiv: File;
     end record;
-end File_priorte;
+end File_priorite;
