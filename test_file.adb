@@ -14,11 +14,12 @@ procedure Test_File is
     end Put_Integer;
 
 
-    package File_priorite_Integer is new File_priorite(Character,Integer,Put_Character,Put_Integer,"<");
+    package File_priorite_Integer is new File_priorite(Character,Integer,Put_Character,Put_Integer,"<","+");
     use File_priorite_Integer;
     
     F : File;
     A : Character;
+    I : Integer;
 begin
     F := Creer_File;
 
@@ -35,18 +36,18 @@ begin
                  -- c: 10
                  -- null: 15 
     -- Check Sortir 
-    Sortir(F,A);
-    Sortir(F,A);
+    Sortir(F,A,I);
+    Sortir(F,A,I);
     Afficher(F); -- a: 15
                  -- b: 25
     Put(A); -- c 
 
     begin
         
-       Sortir(F,A);
-       Sortir(F,A);
-       Sortir(F,A);
-       Sortir(F,A);
+       Sortir(F,A,I);
+       Sortir(F,A,I);
+       Sortir(F,A,I);
+       Sortir(F,A,I);
     exception 
         when Erreur_File_Vide
           => Put_Line("File vide");
