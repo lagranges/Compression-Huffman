@@ -5,13 +5,15 @@ with file_priorite;
 package body Huffman is
     
     type Noeud is record
-        Val: Element; -- égale null si ce n'est pas une feuille
+        Val: Character; -- égale null si ce n'est pas une feuille
         Fg, Fd: Arbre;  -- Fils gauche, Fils droit
     end record;
     
     procedure Afficher_Integer(I: Integer) is 
     begin
+        Put("Afficher Priorite :");
         Put(I,1);
+        Put("  ");
     end Afficher_Integer;
 
     package File_priorite_Character is new File_priorite(Arbre, Integer,Afficher,Afficher_Integer,"<","+");
@@ -41,7 +43,7 @@ package body Huffman is
     end Arbre_Vide;
 
 
-    function Creer_Feuille(E: Element ) return Arbre is
+    function Creer_Feuille(E: Character ) return Arbre is
     begin
         return new Noeud'(Val => E,
                             Fg => null,
@@ -49,91 +51,97 @@ package body Huffman is
     end Creer_Feuille;
 
 
-    function Creer_Arbre (A,B: Arbre) return Arbre is 
+    function Creer_Arbre (A,B: in Arbre) return Arbre is 
     begin 
-        return new Noeud'(Val => Element_Null,
+        return new Noeud'(Val => Character'Val(16#00#),
                             Fg => A,
                             Fd => B);
     end Creer_Arbre;
 
-    procedure Afficher (A: Arbre) is 
+    -- Afficher la suite des feuille, cette procedure sert à la procedure Afficher
+    procedure Afficher_Tmp(A: Arbre) is 
     begin
         if A = null then return; 
         end if; 
-        if A.Fd = null and A.Fg = null then Afficher(A.Val); 
+        if A.Fd = null and A.Fg = null then Put(A.Val); Put("  ");
         else
-           Afficher(A.Fg);
-           Afficher(A.Fd);
+           Afficher_Tmp(A.Fg);
+           Afficher_Tmp(A.Fd);
         end if;
-    end Afficher;
-    
+    end Afficher_Tmp;
 
-    procedure Creer_Arbre (F: in out File;A : out Arbre) is 
+    procedure Afficher (A: Arbre) is
+    begin
+        Put("Afficher Arbre: ");
+        Afficher_Tmp(A);
+        New_Line;
+    end Afficher;
+
+    function Creer_Arbre (Fi: in File) return Arbre is 
        Tmp1, Tmp2, Tmp : Arbre ;
        P1,P2: Integer;
+       F : File := Fi;
+
     begin
-       if Longeur_File(F) = 0 then
+       if Longeur_File(Fi) = 0 then
           raise Erreur_File_Vide;
-       else if Longeur_File(F) = 1 then
+       else if Longeur_File(Fi) = 1 then
           Sortir(F,Tmp1,P1);
-          A :=  new Noeud'(Val => Element_Null, Fg => null, Fd => Tmp1);
-          return;
+          return  new Noeud'(Character'Val(16#00#), Fg => null, Fd => Tmp1);
        else 
           Sortir(F,Tmp1,P1);
           Sortir(F,Tmp2,P2);
           Tmp := Creer_Arbre(Tmp1,Tmp2);
-          if Longeur_File(F) = 2 then
-             A := Creer_Arbre(Tmp1,Tmp2);
-             return;
+          if Longeur_File(Fi) = 2 then
+             return Creer_Arbre(Tmp1,Tmp2);
           else 
             Entrer(F,Tmp,P1+P2);
-            Creer_Arbre(F,A);
+            return Creer_Arbre(F);
           end if;
        end if;
        end if;
     end Creer_Arbre;
 
 
---    function Creer_Arbre(Nom_Fichier : String) return Arbre is 
---       
---        type Tableau_Character is array(Character range <>) of Integer;
---        Fichier : Ada.Streams.Stream_IO.File_Type;
---        Flux : Ada.Streams.Stream_IO.Stream_Access;
---        C : Character;
---        F : File;
---        Tab : Tableau_Character(Character'First..Character'Last) := (others => 0);
---   
---    begin
---
---        F := Creer_File ;
---        -- Overture d'un fichier texte
---        begin
---            Open(Fichier, In_File, Nom_Fichier);
---        exception 
---            when others =>
---            Put("Erreur en lecture: ");  Put(Nom_Fichier); Put_Line(" n'exist pas"); 
---            return null;
---        end;
---     
---        Flux := Stream(Fichier);
---        
---        -- Lecture de caractère
---        while not End_Of_File(Fichier) loop
---            C := Character'Input(Flux);
---            Tab(C) := Tab(C)+1;
---        end loop;
---
---        -- Creer File_priorite à partir de Tab
---        for I in Tab'Range loop
---            if Tab(I)/=0 
---            then
---                Entrer(F, Creer_Feuille(I), Tab(I));
---            end if;
---        end loop; 
---
---        -- Creer Arbre à partir de File_priorite F
---        Creer_Arbre(F);
---
---    end Creer_Arbre;
+    function Creer_Arbre(Nom_Fichier : String) return Arbre is 
+       
+        type Tableau_Character is array(Character range <>) of Integer;
+        Fichier : Ada.Streams.Stream_IO.File_Type;
+        Flux : Ada.Streams.Stream_IO.Stream_Access;
+        C : Character;
+        F : File;
+        Tab : Tableau_Character(Character'First..Character'Last) := (others => 0);
+        A: Arbre;
+    begin
+
+        F := Creer_File ;
+        -- Overture d'un fichier texte
+        begin
+            Open(Fichier, In_File, Nom_Fichier);
+        exception 
+            when others =>
+            Put("Erreur en lecture: ");  Put(Nom_Fichier); Put_Line(" n'exist pas"); 
+            return null;
+        end;
+     
+        Flux := Stream(Fichier);
+        
+        -- Lecture de caractère
+        while not End_Of_File(Fichier) loop
+            C := Character'Input(Flux);
+            Tab(C) := Tab(C)+1;
+        end loop;
+
+        -- Creer File_priorite à partir de Tab
+        for I in Tab'Range loop
+            if Tab(I)/=0 
+            then
+                Entrer(F, Creer_Feuille(I), Tab(I));
+            end if;
+        end loop; 
+        Afficher(F);
+        -- Creer Arbre à partir de File_priorite F
+        return Creer_Arbre(F);
+    end Creer_Arbre;
 
 end Huffman;

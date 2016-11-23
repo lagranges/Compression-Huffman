@@ -1,21 +1,7 @@
 with Ada.Text_IO; use Ada.Text_IO;
 with huffman;
-
+use huffman;
 procedure Test_Arbre is
-    
-    procedure PutCharacter(C:Character) is 
-    begin
-        Put(C);
-        Put("  ");
-    end PutCharacter;
-    
-    function Character_Null return Character is
-    begin
-        return Character'Val(16#00#);
-    end Character_Null;
-
-    package Huffman_Character is new Huffman(Character,Character_Null,PutCharacter);
-    use Huffman_Character;
     
     A : Arbre;
 
@@ -36,7 +22,9 @@ begin
                
     Liberer_Arbre(A);
     Afficher_Info(A); 
-                
+    
+    A := Creer_Arbre("Test_Exemple_IO.txt");   
+    Afficher(A); 
 end Test_Arbre;
 
 

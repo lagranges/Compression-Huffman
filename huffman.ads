@@ -4,12 +4,7 @@ with Ada.Streams.Stream_IO;
 
 -- Ce package permets contruit une arbre Huffman à partir 
 -- d'un fichier des caractères ou d'un fichier compressé.
-generic 
-    type Element is private;
 
-    with function Element_Null return Element;
-    with procedure Afficher(E: in Element);
-   
 package Huffman is 
 
     type Arbre is private;
@@ -22,7 +17,7 @@ package Huffman is
     function Arbre_Vide return Arbre;
 
     -- Creer une Noeud de Feuille qui contient caractere C
-    function Creer_Feuille(E: Element) return Arbre;
+    function Creer_Feuille(E: Character) return Arbre;
 
     -- contruire une arbre avec fils gauche A et fils droit B
     -- renvoie la racine
@@ -34,7 +29,7 @@ package Huffman is
 --    
 --    -- contruire une arbre à partir de nom d'un fichier
 --    -- Exception: file n'exist pas
---    function Creer_Arbre(Nom_Fichier : in String) return Arbre;
+    function Creer_Arbre(Nom_Fichier : in String) return Arbre;
 
     -- pour tester 
     -- afficher tous les caractere dont les feuilles
