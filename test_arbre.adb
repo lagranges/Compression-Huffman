@@ -6,22 +6,37 @@ procedure Test_Arbre is
     procedure PutCharacter(C:Character) is 
     begin
         Put(C);
+        Put("  ");
     end PutCharacter;
+    
+    function Character_Null return Character is
+    begin
+        return Character'Val(16#00#);
+    end Character_Null;
 
-    package Huffman_Character is new Huffman(Character,PutCharacter);
+    package Huffman_Character is new Huffman(Character,Character_Null,PutCharacter);
     use Huffman_Character;
     
     A : Arbre;
+
+    procedure Afficher_Info(A: Arbre) is
+    begin
+        Put("Tous les feuilles de l'arbre: ");
+        Afficher(A);
+        New_Line;
+    end Afficher_Info;
 begin
     A := Arbre_Vide;
-    Afficher(A); -- Afficher: Arbre Vide
-    A := Creer_Arbre(Creer_Feuille('A'),Creer_Feuille('C')); 
-    Afficher(A);--- Afficher: A : 0
-                ---           B : 1
+    Afficher_Info(A); -- Afficher: 
+    A := Creer_Arbre(Creer_Feuille('A'),Creer_Feuille('B')); 
+    Afficher_Info(A);--- Afficher: A B
+                ---           
     A := Creer_Arbre(Creer_Feuille('C'),A);
-    Afficher(A);-- C : 0
-                -- A : 10
-                -- B : 11
+    Afficher_Info(A);-- C A B
+               
+    Liberer_Arbre(A);
+    Afficher_Info(A); 
+                
 end Test_Arbre;
 
 
