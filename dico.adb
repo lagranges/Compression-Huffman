@@ -66,6 +66,35 @@ package body Dico is
         end loop;
         New_Line;
     end Afficher; 
-end Dico; 
+
+    function Ajouter(D: in Dictionnaire; B: Bit) return Dictionnaire is 
+        Tmp1: Dictionnaire:= D;
+        Tmp : Dictionnaire:= Tmp1;
+    begin
+        while Tmp /= null loop
+            Inserer_Tete(Tmp.C,B);
+            Tmp := Tmp.Suiv;
+        end loop;
+        return Tmp1;
+    end Ajouter;
+
+    function Ajouter(D: in Dictionnaire; E: in Dictionnaire) return Dictionnaire is
+        Tmp: Dictionnaire := D;
+        F: Dictionnaire := Creer_Dictionnaire ;
+    begin
+        while Tmp /= null loop
+            Ajouter(F, Tmp.Char, Tmp.C);
+            Tmp := Tmp.Suiv;
+        end loop;
+        Tmp := E;
+        while Tmp /= null loop
+            Ajouter(F, Tmp.Char, Tmp.C);
+            Tmp := Tmp.Suiv;
+        end loop;
+        return F; 
+    end Ajouter; 
+
+
+end Dico;  
    
      

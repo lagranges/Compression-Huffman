@@ -20,7 +20,11 @@ package Dico is
     function Traduire(D: in Dictionnaire; C: in Code) return Character;
     
     procedure Afficher(D: in Dictionnaire);
-
+    
+    -- Ajouter Bit B à la tete de tous les Code dans la dictionnaire
+    function Ajouter(D: in Dictionnaire; B: in Bit) return Dictionnaire;
+    
+    function  Ajouter(D: in Dictionnaire; E: in Dictionnaire) return Dictionnaire;
 private
     type Cellule;    
 

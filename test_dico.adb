@@ -2,7 +2,7 @@ with Ada.Text_IO, Ada.Integer_Text_IO, Code_Binaire, Dico;
 use  Ada.Text_IO, Ada.Integer_Text_IO, Code_Binaire, Dico;
 
 procedure Test_Dico is
-    D: Dictionnaire;
+    D, D1: Dictionnaire;
     Char: Character;
     C,C1: Code;
     B: Bit;
@@ -66,7 +66,28 @@ begin
 
     C := Traduire(D,'a');
     Put("Traduire 'a':");
-    Afficher(C);    
+    Afficher(C); 
+    
+    D := Ajouter(D, 1);
+    Afficher(D);
+    
+    D := Ajouter(D,0);
+    Afficher(D);
+    New_Line;
+    Put(Character'Val(16#00#));
+    Put(Character'Val(16#00#));
+    Put(Character'Val(16#00#));
+    Put("_");
+    New_Line;
+
+    D1 := Creer_Dictionnaire;
+    Ajouter(D1,'x',C1);
+    Ajouter(D1,'y',C);
+    Ajouter(D1,'z',C);
+    Afficher(D1);
+
+    D1 := Ajouter(D,D1);
+    Afficher(D1);
 end Test_Dico;
 
 
