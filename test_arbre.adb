@@ -1,9 +1,11 @@
 with Ada.Text_IO; use Ada.Text_IO;
-with huffman;
-use huffman;
+with huffman,dico;
+use huffman,dico;
+
 procedure Test_Arbre is
     
     A : Arbre;
+    D : Dictionnaire;
 
     procedure Afficher_Info(A: Arbre) is
     begin
@@ -24,7 +26,10 @@ begin
     Afficher_Info(A); 
     
     A := Creer_Arbre("Test_Exemple_IO.txt");   
-    Afficher(A); 
+    Afficher(A);
+
+    D := Creer_Dictionnaire_Text("Test_Exemple_IO.txt");
+    Afficher(D); 
 end Test_Arbre;
 
 

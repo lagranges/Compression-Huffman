@@ -1,6 +1,8 @@
 with Ada.Text_IO;
 with file_priorite;
 with Ada.Streams.Stream_IO;
+with Dico;
+use Dico;
 
 -- Ce package permets contruit une arbre Huffman à partir 
 -- d'un fichier des caractères ou d'un fichier compressé.
@@ -34,7 +36,9 @@ package Huffman is
     -- pour tester 
     -- afficher tous les caractere dont les feuilles
     procedure Afficher(A : in Arbre);
-    
+
+    -- Contruire un dictionnnaire à partir d'une arbre
+    function Creer_Dictionnaire_Text(Nom_Fichier: String) return Dictionnaire;    
 
 
 private

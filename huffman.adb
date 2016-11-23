@@ -1,6 +1,7 @@
 with Ada.Text_IO,Ada.Integer_Text_Io, Ada.Unchecked_Deallocation; use Ada.Text_IO,Ada.Integer_Text_IO;
 with Ada.Streams.Stream_IO; use Ada.Streams.Stream_IO; 
 with file_priorite; 
+with Code_Binaire, Dico; use Code_Binaire, Dico;
 
 package body Huffman is
     
@@ -58,19 +59,21 @@ package body Huffman is
                             Fd => B);
     end Creer_Arbre;
 
-    -- Afficher la suite des feuille, cette procedure sert à la procedure Afficher
-    procedure Afficher_Tmp(A: Arbre) is 
-    begin
-        if A = null then return; 
-        end if; 
-        if A.Fd = null and A.Fg = null then Put(A.Val); Put("  ");
-        else
-           Afficher_Tmp(A.Fg);
-           Afficher_Tmp(A.Fd);
-        end if;
-    end Afficher_Tmp;
 
     procedure Afficher (A: Arbre) is
+             
+        -- Afficher la suite des feuille, cette procedure sert à la procedure Afficher
+        procedure Afficher_Tmp(A: Arbre) is 
+        begin
+            if A = null then return; 
+            end if; 
+            if A.Fd = null and A.Fg = null then Put(A.Val); Put("  ");
+            else
+            Afficher_Tmp(A.Fg);
+            Afficher_Tmp(A.Fd);
+        end if;
+        end Afficher_Tmp;
+
     begin
         Put("Afficher Arbre: ");
         Afficher_Tmp(A);
@@ -111,7 +114,6 @@ package body Huffman is
         C : Character;
         F : File;
         Tab : Tableau_Character(Character'First..Character'Last) := (others => 0);
-        A: Arbre;
     begin
 
         F := Creer_File ;
@@ -140,8 +142,32 @@ package body Huffman is
             end if;
         end loop; 
         Afficher(F);
+        Close(Fichier);
         -- Creer Arbre à partir de File_priorite F
         return Creer_Arbre(F);
     end Creer_Arbre;
 
+
+
+
+    function Creer_Dictionnaire_Text (A : Arbre ) return Dictionnaire is
+        D : Dictionnaire := Creer_Dictionnaire;
+        C : Code := Creer_Code;    
+    begin
+        if A = null then return D; end if;
+        if A.Val /= Character'Val(16#00#) then
+            Ajouter(D,A.Val,C);
+            return D;
+        end if; 
+        return Ajouter(Ajouter(Creer_Dictionnaire_Text(A.Fg),0),
+                       Ajouter(Creer_Dictionnaire_Text(A.Fd),1));
+    end Creer_Dictionnaire_Text;   
+
+
+
+
+    function Creer_Dictionnaire_Text (Nom_Fichier: String ) return Dictionnaire is
+    begin
+        return Creer_Dictionnaire_Text(Creer_Arbre(Nom_Fichier));
+    end Creer_Dictionnaire_Text;    
 end Huffman;
