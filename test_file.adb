@@ -35,6 +35,7 @@ begin
                  -- b: 25
                  -- c: 10
                  -- null: 15 
+    Put(Longeur_File(F));
     -- Check Sortir 
     Sortir(F,A,I);
     Sortir(F,A,I);

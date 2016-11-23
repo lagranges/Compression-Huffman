@@ -76,14 +76,19 @@ package body file_priorite is
         Tmp : File := F;
     begin
         if F = null then Put("File Vide");
-        else    Put("F");
+        else    
+            Put("Afficher File ");
+            Put("de longeur de ");
+            Put(Longeur_File(F));
+            New_Line;
         end if;
         while Tmp /= null loop
-            Put("->");
-            Afficher(Tmp.Val);
             Afficher(Tmp.P);
+            Afficher(Tmp.Val);
+            Put("  ->  ");
             Tmp := Tmp.Suiv;
         end loop;
+        Put("null");
         New_Line;
     end Afficher;
 
