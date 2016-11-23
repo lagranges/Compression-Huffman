@@ -3,9 +3,6 @@ with huffman,dico;
 use huffman,dico;
 
 procedure Test_Arbre is
-    
-    A : Arbre;
-    D : Dictionnaire;
 
     procedure Afficher_Info(A: Arbre) is
     begin
@@ -13,6 +10,11 @@ procedure Test_Arbre is
         Afficher(A);
         New_Line;
     end Afficher_Info;
+
+    A : Arbre;
+    D : Dictionnaire;
+
+
 begin
     A := Arbre_Vide;
     Afficher_Info(A); -- Afficher: 
@@ -28,7 +30,7 @@ begin
     A := Creer_Arbre("Test_Exemple_IO.txt");   
     Afficher(A);
 
-    D := Creer_Dictionnaire_Text("Test_Exemple_IO.txt");
+    D := Creer_Dictionnaire_Text("a.txt");
     Afficher(D); 
 end Test_Arbre;
 

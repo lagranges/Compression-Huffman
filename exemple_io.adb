@@ -25,36 +25,7 @@ procedure Exemple_IO is
         Put_Line(":");
 
         while not End_Of_File(Fichier) loop
-           C := Character'Input(Flux);
-           Put(C); 
-        end loop;
-        
-        Close(Fichier);
-
-    end Lecture_Textuel;
-
-    type Octet is new Integer range 0..255;
-    for Octet'Size use 8;
-    -- Lecture textuel d'un fichier dont le nom est S 
-    procedure Lecture_Textuel(S : String) is 
-        Fichier: Ada.Streams.Stream_IO.File_Type;
-        Flux: Ada.Streams.Stream_IO.Stream_Access;
-        C: Character;
-    begin
-        begin
-            Open(Fichier, In_File, S);
-        exception when others 
-                => Put_Line("Fichier n'exist pas");
-                return;
-        end;
-        Flux := Stream(Fichier);
-
-        Put("Lecture textuel de fichier ");
-        Put(S);
-        Put_Line(":");
-
-        while not End_Of_File(Fichier) loop
-           C := Character'Input(Flux);
+           Character'Read(Flux,C);
            Put(C); 
         end loop;
         
@@ -96,7 +67,7 @@ procedure Exemple_IO is
         Put_Line(":");
 
         while not End_Of_File(Fichier) loop
-           B := Octet'Input(Flux);
+           Octet'Read(Flux,B);
            Put_Octet(B);
         end loop;
 

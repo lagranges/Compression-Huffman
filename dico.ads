@@ -25,6 +25,7 @@ package Dico is
     function Ajouter(D: in Dictionnaire; B: in Bit) return Dictionnaire;
     
     function  Ajouter(D: in Dictionnaire; E: in Dictionnaire) return Dictionnaire;
+
 private
     type Cellule;    
 

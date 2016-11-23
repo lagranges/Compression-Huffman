@@ -16,6 +16,7 @@ package body Huffman is
         Put(I,1);
         Put("  ");
     end Afficher_Integer;
+    
 
     package File_priorite_Character is new File_priorite(Arbre, Integer,Afficher,Afficher_Integer,"<","+");
     use File_priorite_Character;
@@ -67,11 +68,10 @@ package body Huffman is
         begin
             if A = null then return; 
             end if; 
-            if A.Fd = null and A.Fg = null then Put(A.Val); Put("  ");
-            else
+            if A.Fd = null and A.Fg = null then Put(A.Val); Put("|");
+            end if;
             Afficher_Tmp(A.Fg);
             Afficher_Tmp(A.Fd);
-        end if;
         end Afficher_Tmp;
 
     begin
@@ -88,25 +88,24 @@ package body Huffman is
     begin
        if Longeur_File(Fi) = 0 then
           raise Erreur_File_Vide;
-       else if Longeur_File(Fi) = 1 then
-          Sortir(F,Tmp1,P1);
-          return  new Noeud'(Character'Val(16#00#), Fg => null, Fd => Tmp1);
-       else 
-          Sortir(F,Tmp1,P1);
-          Sortir(F,Tmp2,P2);
-          Tmp := Creer_Arbre(Tmp1,Tmp2);
-          if Longeur_File(Fi) = 2 then
-             return Creer_Arbre(Tmp1,Tmp2);
-          else 
-            Entrer(F,Tmp,P1+P2);
-            return Creer_Arbre(F);
-          end if;
+          return Arbre_Vide;
        end if;
-       end if;
+       if Longeur_File(Fi) = 1 then
+          Sortir(F,Tmp1,P1);
+          return  Tmp1;
+       end if; 
+       Sortir(F,Tmp1,P1);
+       Sortir(F,Tmp2,P2);
+       Tmp := Creer_Arbre(Tmp1,Tmp2);
+       if Longeur_File(Fi) = 2 then
+          return Creer_Arbre(Tmp1,Tmp2);
+       end if; 
+       Entrer(F,Tmp,P1+P2);
+       return Creer_Arbre(F);
     end Creer_Arbre;
 
 
-    function Creer_Arbre(Nom_Fichier : String) return Arbre is 
+    function Creer_File(Nom_Fichier : String) return File is 
        
         type Tableau_Character is array(Character range <>) of Integer;
         Fichier : Ada.Streams.Stream_IO.File_Type;
@@ -123,7 +122,7 @@ package body Huffman is
         exception 
             when others =>
             Put("Erreur en lecture: ");  Put(Nom_Fichier); Put_Line(" n'exist pas"); 
-            return null;
+            return Creer_File;
         end;
      
         Flux := Stream(Fichier);
@@ -141,33 +140,39 @@ package body Huffman is
                 Entrer(F, Creer_Feuille(I), Tab(I));
             end if;
         end loop; 
-        Afficher(F);
         Close(Fichier);
+        New_Line;
+        return F;
         -- Creer Arbre à partir de File_priorite F
-        return Creer_Arbre(F);
+    end Creer_File;
+
+
+
+    function Creer_Arbre(Nom_Fichier : String) return Arbre is 
+    begin    
+        -- Creer Arbre à partir de File_priorite F
+        return Creer_Arbre(Creer_File(Nom_Fichier));
     end Creer_Arbre;
 
-
-
-
-    function Creer_Dictionnaire_Text (A : Arbre ) return Dictionnaire is
-        D : Dictionnaire := Creer_Dictionnaire;
-        C : Code := Creer_Code;    
-    begin
-        if A = null then return D; end if;
-        if A.Val /= Character'Val(16#00#) then
-            Ajouter(D,A.Val,C);
-            return D;
-        end if; 
-        return Ajouter(Ajouter(Creer_Dictionnaire_Text(A.Fg),0),
+    function Creer_Dictionnaire_Text (Nom_Fichier: String ) return Dictionnaire is
+    
+        function Creer_Dictionnaire_Text (A : Arbre ) return Dictionnaire is
+            D : Dictionnaire := Creer_Dictionnaire;
+            C : Code := Creer_Code;    
+        begin
+            if A = null then return D; end if;
+            if A.Val /= Character'Val(16#00#) then
+                Ajouter(D,A.Val,C);
+                return D;
+            end if; 
+            return Ajouter(Ajouter(Creer_Dictionnaire_Text(A.Fg),0),
                        Ajouter(Creer_Dictionnaire_Text(A.Fd),1));
+        end Creer_Dictionnaire_Text; 
+
+    begin
+        return Creer_Dictionnaire_Text(Creer_Arbre(Nom_Fichier));
     end Creer_Dictionnaire_Text;   
 
 
 
-
-    function Creer_Dictionnaire_Text (Nom_Fichier: String ) return Dictionnaire is
-    begin
-        return Creer_Dictionnaire_Text(Creer_Arbre(Nom_Fichier));
-    end Creer_Dictionnaire_Text;    
 end Huffman;
