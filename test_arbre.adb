@@ -27,7 +27,7 @@ begin
     Liberer_Arbre(A);
     Afficher_Info(A); 
     
-    A := Creer_Arbre("Test_Exemple_IO.txt");   
+    A := Creer_Arbre("a.txt");   
     Afficher(A);
 
     D := Creer_Dictionnaire_Text("a.txt");

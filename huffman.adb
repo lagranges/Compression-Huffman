@@ -96,9 +96,9 @@ package body Huffman is
        end if; 
        Sortir(F,Tmp1,P1);
        Sortir(F,Tmp2,P2);
-       Tmp := Creer_Arbre(Tmp1,Tmp2);
+       Tmp := Creer_Arbre(Tmp2,Tmp1);
        if Longeur_File(Fi) = 2 then
-          return Creer_Arbre(Tmp1,Tmp2);
+          return Creer_Arbre(Tmp2,Tmp1);
        end if; 
        Entrer(F,Tmp,P1+P2);
        return Creer_Arbre(F);
@@ -129,7 +129,7 @@ package body Huffman is
         
         -- Lecture de caractère
         while not End_Of_File(Fichier) loop
-            C := Character'Input(Flux);
+            Character'Read(Flux,C);
             Tab(C) := Tab(C)+1;
         end loop;
 
