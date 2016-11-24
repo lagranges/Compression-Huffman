@@ -1,6 +1,6 @@
 -- Ce fichier a pour objectif de réaliser des lectures/écritures
 -- en texteul et en binaire dans des fichier
-with Ada.Text_IO, Ada.Integer_Text_Io, Ada.Streams.Stream_IO;
+with Ada.Text_IO, Ada.Integer_Text_Io, Ada.Streams.Stream_IO, Ada.IO_Exceptions;
 use Ada.Text_IO, Ada.Integer_Text_Io, Ada.Streams.Stream_IO; 
 
 procedure Exemple_IO is 
@@ -56,9 +56,11 @@ procedure Exemple_IO is
     begin
         begin
             Open(Fichier, In_File, S);
-        exception when others 
-                => Put_Line("Fichier n'exist pas");
+        exception when Ada.IO_Exceptions.Status_Error 
+                => Put_Line("Fichier est en rédaction");
                 return;
+                when others
+                => Put_Line("Fichier n'exist pas");
         end;
         Flux := Stream(Fichier);
 
@@ -75,7 +77,7 @@ procedure Exemple_IO is
 
     end Lecture_Binaire;
 begin
-    Lecture_Textuel("Test_Exemple_IO.txt");
-    Lecture_Binaire("Test_Exemple_IO.txt");
+    Lecture_Textuel("compression.huffman");
+    Lecture_Binaire("compression.huffman");
 end Exemple_IO;
 

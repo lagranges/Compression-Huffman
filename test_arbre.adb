@@ -28,7 +28,7 @@ begin
     Afficher_Info(A); 
     
     A := Creer_Arbre("a.txt");   
-    Afficher(A);
+    Afficher(;
 
     D := Creer_Dictionnaire_Text("a.txt");
     Afficher(D); 

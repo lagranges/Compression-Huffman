@@ -87,7 +87,6 @@ package body Huffman is
 
     begin
        if Longeur_File(Fi) = 0 then
-          raise Erreur_File_Vide;
           return Arbre_Vide;
        end if;
        if Longeur_File(Fi) = 1 then
@@ -117,13 +116,7 @@ package body Huffman is
 
         F := Creer_File ;
         -- Overture d'un fichier texte
-        begin
-            Open(Fichier, In_File, Nom_Fichier);
-        exception 
-            when others =>
-            Put("Erreur en lecture: ");  Put(Nom_Fichier); Put_Line(" n'exist pas"); 
-            return Creer_File;
-        end;
+        Open(Fichier, In_File, Nom_Fichier);
      
         Flux := Stream(Fichier);
         

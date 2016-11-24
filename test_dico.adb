@@ -88,6 +88,14 @@ begin
 
     D1 := Ajouter(D,D1);
     Afficher(D1);
+
+    Afficher(C);
+    Supprimer_nTete(C,5,C1);
+    Afficher(C);
+    Afficher(C1);
+    Inserer_Code_Queue(C1,C);
+    Afficher(C1);
+
 end Test_Dico;
 
 

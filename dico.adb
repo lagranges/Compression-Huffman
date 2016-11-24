@@ -33,8 +33,8 @@ package body Dico is
         Tmp: Dictionnaire := D;
     begin
         while Tmp /= null loop
-            if Tmp.Char = Char then 
-                return Tmp.C;
+            if Tmp.Char = Char then
+                return Creer_Code(Tmp.C);
             end if;
                 Tmp := Tmp.Suiv;
         end loop;
@@ -42,7 +42,7 @@ package body Dico is
     end Traduire;
 
       
-    function Traduire(D:in Dictionnaire; C: Code) return Character is
+    function Traduire(D: in Dictionnaire; C: Code) return Character is
         Tmp: Dictionnaire := D;
     begin
         while Tmp /= null loop
