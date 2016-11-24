@@ -38,7 +38,7 @@ package body Dico is
             end if;
                 Tmp := Tmp.Suiv;
         end loop;
-        raise Erreur_Sans_Existe; 
+        return Creer_Code; 
     end Traduire;
 
       
@@ -51,7 +51,7 @@ package body Dico is
             end if;
             Tmp := Tmp.Suiv;
         end loop;
-        raise Erreur_Sans_Existe; 
+        return Character'Val(16#00#); 
     end Traduire; 
 
    procedure Afficher(D: in Dictionnaire) is 

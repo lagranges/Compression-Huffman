@@ -125,23 +125,32 @@ package body Code_Binaire is
         O: Octet := 0;
     begin
         if Longeur_Code(C) /= 8 then raise Erreur_En_Convertant_Code;  end if;
-        for i in Integer range 7..0 loop
-            O := O + Octet(Tmp.Val*(2**i));
+        for i in Integer range 0..7 loop
+            O := O + Octet(Tmp.Val*(2**(7-i)));
         end loop;
         return O; 
     end;
+
+    function Convertir_En_Code(O: in Octer) return Code is
+        Tmp : Integer := Integer(O);
+        C : Code := Creer_Code;
+    begin
+        for i in Integer range 0..7 loop
+            O:
+        end loop;
+        return O; 
+    end Convertir_En_Code;
 
     procedure Ecrire(C: in out Code; Flux : in out Stream_Access) is
        Tmp : Code := Creer_Code;
     begin
        while Longeur_Code(C)>=8 loop
         Supprimer_nTete(C,8,Tmp);
-        Afficher(C);
-        Afficher(Tmp);
-        --Octet'Write(Flux,Convertir_En_Octet(Tmp)); 
+        Octet'Write(Flux,Convertir_En_Octet(Tmp)); 
        end loop;
        return;
     end Ecrire; 
+    
 
 end Code_Binaire;
      

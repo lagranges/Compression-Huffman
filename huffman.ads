@@ -40,6 +40,7 @@ package Huffman is
     -- Contruire un dictionnnaire à partir d'une arbre
     function Creer_Dictionnaire_Text(Nom_Fichier: String) return Dictionnaire;    
 
+    function Creer_Dictionnaire_Binaire(Nom_Fichier: String) return Dictionnaire;
 
 private
 
