@@ -117,40 +117,46 @@ package body Code_Binaire is
        if C = null and D = null then return true; end if;
        if C = null and D /= null then return false; end if;
        if C /= null and D = null then return false; end if;
-       return (Compare_Code(C.Suiv,D.Suiv));
+       if C.Val = D.Val then return (Compare_Code(C.Suiv,D.Suiv));
+        else return false; end if;
    end ;
 
     function Convertir_En_Octet(C: in Code) return Octet is
         Tmp : Code := C;
         O: Octet := 0;
     begin
-        if Longeur_Code(C) /= 8 then raise Erreur_En_Convertant_Code;  end if;
         for i in Integer range 0..7 loop
             O := O + Octet(Tmp.Val*(2**(7-i)));
+            Tmp := Tmp.Suiv;
         end loop;
         return O; 
     end;
 
-    function Convertir_En_Code(O: in Octer) return Code is
+    function Convertir_En_Code(O: in Octet) return Code is
         Tmp : Integer := Integer(O);
         C : Code := Creer_Code;
     begin
         for i in Integer range 0..7 loop
-            O:
+            Inserer_Tete(C,Bit(Integer(Tmp-Integer(Tmp/2)*2)));
+            Tmp := Integer(Tmp/2);
         end loop;
-        return O; 
+        return C; 
     end Convertir_En_Code;
 
-    procedure Ecrire(C: in out Code; Flux : in out Stream_Access) is
+    procedure Inserer_Octet_Queue(C: in out Code; O: in Octet) is
+    begin
+        Inserer_Code_Queue(C,Convertir_En_Code(O));
+    end Inserer_Octet_Queue;    
+
+    procedure Ecrire_Binaire(C: in out Code; Flux : in out Stream_Access) is
        Tmp : Code := Creer_Code;
     begin
        while Longeur_Code(C)>=8 loop
         Supprimer_nTete(C,8,Tmp);
-        Octet'Write(Flux,Convertir_En_Octet(Tmp)); 
+        Octet'Write(Flux,Convertir_En_Octet(Tmp));
        end loop;
        return;
-    end Ecrire; 
-    
-
+    end Ecrire_Binaire; 
+   
 end Code_Binaire;
      

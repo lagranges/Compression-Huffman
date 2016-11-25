@@ -30,7 +30,7 @@ procedure Exemple_IO is
         end loop;
         
         Close(Fichier);
-
+        New_Line;
     end Lecture_Textuel;
 
     type Octet is new Integer range 0..255;
@@ -74,10 +74,12 @@ procedure Exemple_IO is
         end loop;
 
         Close(Fichier);
-
+        New_Line;
     end Lecture_Binaire;
 begin
+    Lecture_Textuel("a.txt");
     Lecture_Textuel("compression.huffman");
     Lecture_Binaire("compression.huffman");
+    Lecture_Textuel("decommpression.huffman");
 end Exemple_IO;
 

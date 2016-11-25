@@ -4,7 +4,7 @@ use  Ada.Text_IO, Ada.Integer_Text_IO, Code_Binaire, Dico;
 procedure Test_Dico is
     D, D1: Dictionnaire;
     Char: Character;
-    C,C1: Code;
+    C,C1,C2,C3: Code;
     B: Bit;
 begin
     D := Creer_Dictionnaire;
@@ -91,11 +91,22 @@ begin
 
     Afficher(C);
     Supprimer_nTete(C,5,C1);
-    Afficher(C);
-    Afficher(C1);
     Inserer_Code_Queue(C1,C);
-    Afficher(C1);
-
+    
+    D:= Creer_Dictionnaire;
+    C:= Creer_Code;
+    C1:= Creer_Code;
+    Inserer_Queue(C2,0);
+    Inserer_Queue(C2,1);
+    Ajouter(D,'a',C2);
+    Inserer_Queue(C,1);
+    Ajouter(D,'b',C);
+    Afficher(D);
+    Inserer_Queue(C1,0);
+    Put(Traduire(D,C1));
+    Inserer_Queue(C1,1);
+    Put(Traduire(D,C1));
+  
 end Test_Dico;
 
 

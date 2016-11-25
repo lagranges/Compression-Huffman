@@ -158,8 +158,8 @@ package body Huffman is
                 Ajouter(D,A.Val,C);
                 return D;
             end if; 
-            return Ajouter(Ajouter(Creer_Dictionnaire_Text(A.Fg),0),
-                       Ajouter(Creer_Dictionnaire_Text(A.Fd),1));
+            return Ajouter(Ajouter(Creer_Dictionnaire(A.Fg),0),
+                       Ajouter(Creer_Dictionnaire(A.Fd),1));
         end Creer_Dictionnaire; 
 
     function Creer_Dictionnaire_Text (Nom_Fichier: String ) return Dictionnaire is 
@@ -169,29 +169,34 @@ package body Huffman is
 
 
         
-        function Creer_Dictionnaire_Binaire(Flux_Tmp: in out Stream_Access ) return Dictionnaire is
+    function Creer_Dictionnaire_Binaire(Nom_Fichier: in String ) return Dictionnaire is
             
-            D : Dictionnaire := Creer_Dictionnaire; 
-            C : Character ;
-            I : Integer;
-            F : File_priorite := Creer_File;
-            Tab : Tab_Character(Character'First..Character'Last):= (others => 0);
-        begin
-
-            Integer'Read(Flux_Tmp , I );
-            while I /= 0  loop
-                Character'Read(Flux_Tmp,C);
-                Tab(C):= I;
-                Integer'Read(Flux_Tmp, I);
-            end loop;
-            -- Creer File_priorite à partir de Tab
-            for J in Tab'Range loop
-                if Tab(J)/=0 
-                then
-                    Entrer(F, Creer_Feuille(J), Tab(J));
-                end if;
-            end loop;  
-            return Creer_Dictionnaire(Creer_Arbre(F));
-        end Creer_Dictionnaire_Binaire;
+        Fichier : Ada.Streams.Stream_IO.File_Type;
+        Flux_Tmp : Ada.Streams.Stream_IO.Stream_Access;
+        D : Dictionnaire := Creer_Dictionnaire;
+        C : Character ;
+        I : Integer;
+        F : File := Creer_File;
+        Tab : Tableau_Character(Character'First..Character'Last):= (others => 0);
+    begin
+        Open(Fichier, In_File, Nom_Fichier);
+        Flux_Tmp := Stream(Fichier);
+        Integer'Read(Flux_Tmp, I);
+        Integer'Read(Flux_Tmp , I );
+        while I /= 0  loop
+            Character'Read(Flux_Tmp,C);
+            Tab(C):= I;
+            Integer'Read(Flux_Tmp, I);
+        end loop;
+        -- Creer File_priorite à partir de Tab
+        for J in Tab'Range loop
+            if Tab(J)/=0 
+            then
+                Entrer(F, Creer_Feuille(J), Tab(J));
+            end if;
+        end loop; 
+        close(Fichier); 
+        return Creer_Dictionnaire(Creer_Arbre(F));
+    end Creer_Dictionnaire_Binaire;
 
 end Huffman;

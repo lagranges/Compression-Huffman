@@ -37,12 +37,13 @@ package Code_Binaire is
     -- Insere un suite de bit D au but de C
     procedure Inserer_Code_Queue(C: in out Code; D: in Code);   
 
+    procedure Inserer_Octet_Queue(C: in out Code; O: in Octet);
     -- Supprimer le premiere bit et retourne en B
     -- Exception: Raise erreur_code_vide une fois C est vide
     procedure Supprimer_Tete(C: in out Code; B: out Bit);
 
     -- Ecire code en terme de octet , s'arrete un fois longeur de C < 8
-    procedure Ecrire(C: in out Code; Flux:in out Stream_Access);
+    procedure Ecrire_Binaire(C: in out Code; Flux:in out Stream_Access);
 
     -- Supprimer les n premiere bit et les retourn en Code D
     -- Exception: Raise erreur_code_court

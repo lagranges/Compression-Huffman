@@ -42,11 +42,11 @@ package body Dico is
     end Traduire;
 
       
-    function Traduire(D: in Dictionnaire; C: Code) return Character is
+    function Traduire(D: in Dictionnaire; C:in Code) return Character is
         Tmp: Dictionnaire := D;
     begin
         while Tmp /= null loop
-            if Compare_Code(Tmp.C,C) then 
+            if Compare_Code(Tmp.C,C) then
                 return Tmp.Char;
             end if;
             Tmp := Tmp.Suiv;
