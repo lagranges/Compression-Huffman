@@ -13,6 +13,8 @@ package Huffman is
 
     Erreur_File_Vide: exception;
 
+    type Tableau_Character is array(Character'First..Character'Last) of Integer;
+   
     procedure Liberer_Arbre(A : in out Arbre);
     
     -- Return Arbre_Vide
@@ -31,14 +33,16 @@ package Huffman is
 --    
 --    -- contruire une arbre à partir de nom d'un fichier
 --    -- Exception: file n'exist pas
-    function Creer_Arbre(Nom_Fichier : in String) return Arbre;
+    procedure Creer_Arbre(A: out Arbre; Nom_Fichier: in String;
+                         Tab: out Tableau_Character);
 
     -- pour tester 
     -- afficher tous les caractere dont les feuilles
     procedure Afficher(A : in Arbre);
 
+    
     -- Contruire un dictionnnaire à partir d'une arbre
-    function Creer_Dictionnaire_Text(Nom_Fichier: String) return Dictionnaire;    
+    procedure Creer_Dictionnaire_Text (D :out Dictionnaire; Nom_Fichier: in String;                                       Tab: out Tableau_Character); 
 
     function Creer_Dictionnaire_Binaire(Nom_Fichier: String) return Dictionnaire;
 

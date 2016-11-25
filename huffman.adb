@@ -17,8 +17,6 @@ package body Huffman is
         Put("  ");
     end Afficher_Integer;
     
-
-    type Tableau_Character is array(Character range <>) of Integer;
    
     package File_priorite_Character is new File_priorite(Arbre, Integer,Afficher,Afficher_Integer,"<","+");
     use File_priorite_Character;
@@ -106,15 +104,15 @@ package body Huffman is
     end Creer_Arbre;
 
 
-    function Creer_File(Nom_Fichier : String) return File is 
+    procedure Creer_File(F:out File; Nom_Fichier: in String; 
+                        Tab: out Tableau_Character) is 
        
         Fichier : Ada.Streams.Stream_IO.File_Type;
         Flux : Ada.Streams.Stream_IO.Stream_Access;
         C : Character;
-        F : File;
-        Tab : Tableau_Character(Character'First..Character'Last) := (others => 0);
     begin
 
+        Tab := (others => 0);
         F := Creer_File ;
         -- Overture d'un fichier texte
         Open(Fichier, In_File, Nom_Fichier);
@@ -137,36 +135,40 @@ package body Huffman is
 
         Close(Fichier);
         New_Line;
-        return F;
         -- Creer Arbre à partir de File_priorite F
     end Creer_File;
 
 
 
-    function Creer_Arbre(Nom_Fichier : String) return Arbre is 
+    procedure Creer_Arbre(A: out Arbre; Nom_Fichier : in String;
+                         Tab: out Tableau_Character ) is 
+        F: File; 
     begin    
+        Creer_File(F,Nom_Fichier,Tab);
         -- Creer Arbre à partir de File_priorite F
-        return Creer_Arbre(Creer_File(Nom_Fichier));
+        A:= Creer_Arbre(F);
     end Creer_Arbre;
 
-        function Creer_Dictionnaire (A : Arbre ) return Dictionnaire is
-            D : Dictionnaire := Creer_Dictionnaire;
-            C : Code := Creer_Code;    
-        begin
-            if A = null then return D; end if;
-            if A.Val /= Character'Val(16#00#) then
+    function Creer_Dictionnaire (A : Arbre ) return Dictionnaire is
+         D : Dictionnaire := Creer_Dictionnaire;
+         C : Code := Creer_Code;    
+    begin
+         if A = null then return D; end if;
+         if A.Val /= Character'Val(16#00#) then
                 Ajouter(D,A.Val,C);
                 return D;
-            end if; 
-            return Ajouter(Ajouter(Creer_Dictionnaire(A.Fg),0),
+         end if; 
+         return Ajouter(Ajouter(Creer_Dictionnaire(A.Fg),0),
                        Ajouter(Creer_Dictionnaire(A.Fd),1));
-        end Creer_Dictionnaire; 
+    end Creer_Dictionnaire; 
 
-    function Creer_Dictionnaire_Text (Nom_Fichier: String ) return Dictionnaire is 
+    procedure Creer_Dictionnaire_Text (D: out Dictionnaire; Nom_Fichier: in String;
+                                 Tab:out Tableau_Character) is 
+        Tmp: Arbre ;
     begin
-        return Creer_Dictionnaire(Creer_Arbre(Nom_Fichier));
+        Creer_Arbre(Tmp,Nom_Fichier,Tab);
+        D := Creer_Dictionnaire(Tmp);
     end Creer_Dictionnaire_Text;   
-
 
         
     function Creer_Dictionnaire_Binaire(Nom_Fichier: in String ) return Dictionnaire is
@@ -177,17 +179,17 @@ package body Huffman is
         C : Character ;
         I : Integer;
         F : File := Creer_File;
-        Tab : Tableau_Character(Character'First..Character'Last):= (others => 0);
+        Tab : Tableau_Character := (others => 0);
     begin
         Open(Fichier, In_File, Nom_Fichier);
         Flux_Tmp := Stream(Fichier);
-        Integer'Read(Flux_Tmp, I);
         Integer'Read(Flux_Tmp , I );
         while I /= 0  loop
             Character'Read(Flux_Tmp,C);
             Tab(C):= I;
             Integer'Read(Flux_Tmp, I);
         end loop;
+        Integer'Read(Flux_Tmp, I);
         -- Creer File_priorite à partir de Tab
         for J in Tab'Range loop
             if Tab(J)/=0 

@@ -15,30 +15,19 @@ procedure TP_Huffman is
     
     
     
-        procedure Debut_Compression(Nom_Fichier : in String; Flux_Sorti: in out Stream_Access) is
+        procedure Debut_Compression(Tab : in Tableau_Character; Flux_Sorti: in out Stream_Access) is
       
-            type Tab_Character is array (Character range  Character'First..Character'Last) of Integer;
-            Tab : Tab_Character := (others => 0);
-            Fichier_Tmp : Ada.Streams.Stream_IO.File_Type ;
-            Flux_Tmp : Stream_Access ; 
-            C : Character ;
-            I : Integer := 0; -- Variable pour compter le nb des characters
+            Nb_Character : Integer := 0; -- Variable pour compter le nb des characters
         begin 
-            Open_fichier(Fichier_Tmp,Flux_Tmp,Nom_Fichier);
-            while not End_Of_File(Fichier_Tmp) loop
-                Character'Read(Flux_Tmp,C);
-                I := I +1;                
-                Tab(C) := Tab(C) + 1;
-            end loop;
-            Integer'Write(Flux_Sorti, I); -- Ecrire au début de fichier 
             for j in Tab'Range loop
-                if Tab(j) /= 0 then 
+                if Tab(j) /= 0 then
+                    Nb_Character := Nb_Character + Tab(j); 
                     Integer'Write(Flux_Sorti, Tab(j));
                     Character'Write(Flux_Sorti, j);
                 end if;
             end loop;
                 Integer'Write(FLux_Sorti,0);
-            Close(Fichier_Tmp);
+                Integer'Write(Flux_Sorti, Nb_Character);
         end Debut_Compression;   
     
         Fichier_Sorti : Ada.Streams.Stream_IO.File_Type; 
@@ -50,16 +39,18 @@ procedure TP_Huffman is
         C: Code:= Creer_Code;
         Char: Character;
         i: Integer:= 0;
+        Tab: Tableau_Character;
     begin  
     
         Create(Fichier_Sorti,Out_File,"compression.huffman");
         Flux_Sorti := Stream(Fichier_Sorti);
         
-        -- Ecire list des caractere et ses nombres d'apparition
-        Debut_Compression(Nom_Fichier,Flux_Sorti);
-        
         -- Traiduire la text
-        D := Creer_Dictionnaire_Text(Nom_Fichier);
+        Creer_Dictionnaire_Text(D,Nom_Fichier, Tab);
+        
+        -- Ecire list des caractere et ses nombres d'apparition
+        Debut_Compression(Tab,Flux_Sorti);
+        
         Open_Fichier(Fichier_Entre,Flux_Entre,Nom_Fichier);
         while not End_Of_File(Fichier_Entre) loop
             Character'Read(Flux_Entre,Char);
@@ -79,8 +70,8 @@ procedure TP_Huffman is
 
     procedure Decompression(Nom_Fichier: in String) is 
 
-        procedure Ecrire_Text(C: in out Code; D: in Dictionnaire; Flux: in out
-Stream_Access; Nb_Character : in out Integer ) is 
+        procedure Ecrire_Text(C: in out Code; D: in Dictionnaire; 
+                              Flux: in out Stream_Access; Nb_Character : in out Integer ) is 
             Tmp : Code := Creer_Code;
             B: Bit;
             L: Integer :=  Longeur_Code(C);
@@ -110,16 +101,17 @@ Stream_Access; Nb_Character : in out Integer ) is
         C: Code := Creer_Code;
         O: Octet;
     begin
+
+        Put("Ok");
         Create(Fichier_Sorti, Out_File, "decommpression.huffman" ); 
         Flux_Sorti := Stream(Fichier_Sorti);  
         Open_Fichier(Fichier, Flux, Nom_Fichier);
-        Integer'Read(Flux,Nb_Character);
         Integer'Read(Flux,I);
         while I /= 0 loop
             Character'Read(Flux, Char);
             Integer'Read(Flux,I);
         end loop;
-
+        Integer'Read(Flux,Nb_Character);
         while not End_Of_File(Fichier) loop
             Octet'Read(Flux,O);
             Inserer_Octet_Queue(C,O);
