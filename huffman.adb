@@ -80,6 +80,8 @@ package body Huffman is
         New_Line;
     end Afficher;
 
+
+
     function Creer_Arbre (Fi: in File) return Arbre is 
        Tmp1, Tmp2, Tmp : Arbre ;
        P1,P2: Integer;
@@ -104,45 +106,44 @@ package body Huffman is
     end Creer_Arbre;
 
 
-    procedure Creer_File(F:out File; Nom_Fichier: in String; 
-                        Tab: out Tableau_Character) is 
-       
-        Fichier : Ada.Streams.Stream_IO.File_Type;
-        Flux : Ada.Streams.Stream_IO.Stream_Access;
-        C : Character;
-    begin
-
-        Tab := (others => 0);
-        F := Creer_File ;
-        -- Overture d'un fichier texte
-        Open(Fichier, In_File, Nom_Fichier);
-     
-        Flux := Stream(Fichier);
-        
-        -- Lecture de caractère
-        while not End_Of_File(Fichier) loop
-            Character'Read(Flux,C);
-            Tab(C) := Tab(C)+1;
-        end loop;
-
-        -- Creer File_priorite à partir de Tab
-        for I in Tab'Range loop
-            if Tab(I)/=0 
-            then
-                Entrer(F, Creer_Feuille(I), Tab(I));
-            end if;
-        end loop; 
-
-        Close(Fichier);
-        New_Line;
-        -- Creer Arbre à partir de File_priorite F
-    end Creer_File;
-
-
-
     procedure Creer_Arbre(A: out Arbre; Nom_Fichier : in String;
-                         Tab: out Tableau_Character ) is 
-        F: File; 
+                         Tab: out Tableau_Character ) is
+ 
+        procedure Creer_File(F:out File; Nom_Fichier: in String; 
+                            Tab: out Tableau_Character) is 
+           
+            Fichier : Ada.Streams.Stream_IO.File_Type;
+            Flux : Ada.Streams.Stream_IO.Stream_Access;
+            C : Character;
+        begin
+
+            Tab := (others => 0);
+            F := Creer_File ;
+            -- Overture d'un fichier texte
+            Open(Fichier, In_File, Nom_Fichier);
+         
+            Flux := Stream(Fichier);
+            
+            -- Lecture de caractère
+            while not End_Of_File(Fichier) loop
+                Character'Read(Flux,C);
+                Tab(C) := Tab(C)+1;
+            end loop;
+
+            -- Creer File_priorite à partir de Tab
+            for I in Tab'Range loop
+                if Tab(I)/=0 
+                then
+                    Entrer(F, Creer_Feuille(I), Tab(I));
+                end if;
+            end loop; 
+
+            Close(Fichier);
+            New_Line;
+            -- Creer Arbre à partir de File_priorite F
+        end Creer_File;
+       
+        F: File;
     begin    
         Creer_File(F,Nom_Fichier,Tab);
         -- Creer Arbre à partir de File_priorite F
@@ -171,25 +172,21 @@ package body Huffman is
     end Creer_Dictionnaire_Text;   
 
         
-    function Creer_Dictionnaire_Binaire(Nom_Fichier: in String ) return Dictionnaire is
+    procedure Creer_Dictionnaire_Binaire(D: out Dictionnaire;
+        Flux_Tmp : in out Ada.Streams.Stream_IO.Stream_Access
+)  is
             
-        Fichier : Ada.Streams.Stream_IO.File_Type;
-        Flux_Tmp : Ada.Streams.Stream_IO.Stream_Access;
-        D : Dictionnaire := Creer_Dictionnaire;
         C : Character ;
         I : Integer;
         F : File := Creer_File;
         Tab : Tableau_Character := (others => 0);
     begin
-        Open(Fichier, In_File, Nom_Fichier);
-        Flux_Tmp := Stream(Fichier);
         Integer'Read(Flux_Tmp , I );
         while I /= 0  loop
             Character'Read(Flux_Tmp,C);
             Tab(C):= I;
             Integer'Read(Flux_Tmp, I);
         end loop;
-        Integer'Read(Flux_Tmp, I);
         -- Creer File_priorite à partir de Tab
         for J in Tab'Range loop
             if Tab(J)/=0 
@@ -197,8 +194,7 @@ package body Huffman is
                 Entrer(F, Creer_Feuille(J), Tab(J));
             end if;
         end loop; 
-        close(Fichier); 
-        return Creer_Dictionnaire(Creer_Arbre(F));
+        D := Creer_Dictionnaire(Creer_Arbre(F));
     end Creer_Dictionnaire_Binaire;
 
 end Huffman;

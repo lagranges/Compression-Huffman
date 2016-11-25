@@ -79,12 +79,12 @@ package body Code_Binaire is
     procedure Inserer_Code_Queue(C: in out Code; D: in Code) is
         Tmp: Code := C;
     begin
-        if C = null then C := D;
+        if C = null then C := Creer_Code(D);
         else
             while Tmp.Suiv /= null loop
                 Tmp := Tmp.Suiv;
             end loop;
-            Tmp.Suiv := D;
+            Tmp.Suiv := Creer_Code(D);
         end if;
     end Inserer_Code_Queue;
 

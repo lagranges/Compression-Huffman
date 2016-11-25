@@ -13,21 +13,28 @@ procedure TP_Huffman is
 
     procedure Compression(Nom_Fichier :in String) is
     
-    
-    
+        -- écrire à la tete de fichier compressé fini par nb total de caractere
+        -- pram : Tableau de caractere et le nombre d'apparition
         procedure Debut_Compression(Tab : in Tableau_Character; Flux_Sorti: in out Stream_Access) is
       
             Nb_Character : Integer := 0; -- Variable pour compter le nb des characters
         begin 
             for j in Tab'Range loop
                 if Tab(j) /= 0 then
+                    -- mettre à jour Nb_Char
                     Nb_Character := Nb_Character + Tab(j); 
+                    -- ecrire le nb d'apparaition
                     Integer'Write(Flux_Sorti, Tab(j));
+                    -- ecrire le Caratere correspondante
                     Character'Write(Flux_Sorti, j);
                 end if;
             end loop;
+                -- ecrire 0 pour infomer la fini la tete
                 Integer'Write(FLux_Sorti,0);
+                -- ecrire Nb de caractere dans le fichier 
+                -- pour le cas Nb bits % 8 /= 0 , décomp va lire exactement 
                 Integer'Write(Flux_Sorti, Nb_Character);
+
         end Debut_Compression;   
     
         Fichier_Sorti : Ada.Streams.Stream_IO.File_Type; 
@@ -40,6 +47,7 @@ procedure TP_Huffman is
         Char: Character;
         i: Integer:= 0;
         Tab: Tableau_Character;
+        Tab_Dic: Tab_Dictionnaire;
     begin  
     
         Create(Fichier_Sorti,Out_File,"compression.huffman");
@@ -47,16 +55,23 @@ procedure TP_Huffman is
         
         -- Traiduire la text
         Creer_Dictionnaire_Text(D,Nom_Fichier, Tab);
-        
+                
+        Tab_Dic := Creer_Tab_Dictionnaire(D);
+
         -- Ecire list des caractere et ses nombres d'apparition
         Debut_Compression(Tab,Flux_Sorti);
         
         Open_Fichier(Fichier_Entre,Flux_Entre,Nom_Fichier);
+
         while not End_Of_File(Fichier_Entre) loop
             Character'Read(Flux_Entre,Char);
-            Inserer_Code_Queue(C,Traduire(D,Char));
+            -- Mettre à jour C
+            Inserer_Code_Queue(C,Tab_Dic(Char));
+            -- Ecrire une code C sur flux
+            -- Voir Code.adb
             Ecrire_Binaire(C, Flux_Sorti);
         end loop;
+        -- pour ecrire dans le cas longeur de C /= 0 
         for j in Integer range 1..7 loop
             Inserer_Queue(C,0);
         end loop;
@@ -70,6 +85,7 @@ procedure TP_Huffman is
 
     procedure Decompression(Nom_Fichier: in String) is 
 
+        -- Traduire de code à text et ecrire
         procedure Ecrire_Text(C: in out Code; D: in Dictionnaire; 
                               Flux: in out Stream_Access; Nb_Character : in out Integer ) is 
             Tmp : Code := Creer_Code;
@@ -83,6 +99,7 @@ procedure TP_Huffman is
                 Char := Traduire(D,Tmp);
                 if Char /= Character'Val(16#00#) then
                     Character'Write(Flux,Char);
+                    -- Metre à jour Nb Caractere
                     Nb_Character := Nb_Character - 1;
                     if Nb_Character = 0 then return; end if;
                     Tmp := Creer_Code;
@@ -90,30 +107,27 @@ procedure TP_Huffman is
             end loop;
             C := Tmp;
         end Ecrire_Text;
-    
-        D: Dictionnaire := Creer_Dictionnaire_Binaire(Nom_Fichier);
+         
+        D: Dictionnaire ;
         Fichier_Sorti: Ada.Streams.Stream_IO.File_Type;
         Fichier: Ada.Streams.Stream_IO.File_Type;
         Flux_Sorti: Stream_Access; 
         Flux: Stream_Access; 
-        I, Nb_Character: Integer;
-        Char: Character;
+        Nb_Character: Integer;
         C: Code := Creer_Code;
         O: Octet;
     begin
-
         Put("Ok");
-        Create(Fichier_Sorti, Out_File, "decommpression.huffman" ); 
-        Flux_Sorti := Stream(Fichier_Sorti);  
+        Create(Fichier_Sorti, Out_File, "decommpression.huffman" );        Flux_Sorti := Stream(Fichier_Sorti);  
         Open_Fichier(Fichier, Flux, Nom_Fichier);
-        Integer'Read(Flux,I);
-        while I /= 0 loop
-            Character'Read(Flux, Char);
-            Integer'Read(Flux,I);
-        end loop;
+        -- Lire tete et creer la dictionnaire
+        Creer_Dictionnaire_Binaire(D,Flux);
+        -- Lire NB caractere        
         Integer'Read(Flux,Nb_Character);
+        -- Commencer de decompresser
         while not End_Of_File(Fichier) loop
             Octet'Read(Flux,O);
+            -- Mettre à jour C
             Inserer_Octet_Queue(C,O);
             Ecrire_Text(C,D,Flux_Sorti,Nb_Character); 
         end loop;

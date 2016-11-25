@@ -12,6 +12,7 @@ generic
     with procedure Afficher(D : in Donnee);
     with procedure Afficher(P:  in Priorite);
     -- Signature d'Operateur
+    -- fonciton moin prioritaire
     with function "<" (P1 : in Priorite; P2 : in Priorite) return Boolean;
     with function "+" (P1 : in Priorite; P2 : in Priorite) return Priorite;
 package File_priorite is

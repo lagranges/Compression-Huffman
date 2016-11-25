@@ -33,6 +33,7 @@ package Huffman is
 --    
 --    -- contruire une arbre à partir de nom d'un fichier
 --    -- Exception: file n'exist pas
+      -- Retourne la Tab des caratere avec le Nb de apparition
     procedure Creer_Arbre(A: out Arbre; Nom_Fichier: in String;
                          Tab: out Tableau_Character);
 
@@ -44,7 +45,10 @@ package Huffman is
     -- Contruire un dictionnnaire à partir d'une arbre
     procedure Creer_Dictionnaire_Text (D :out Dictionnaire; Nom_Fichier: in String;                                       Tab: out Tableau_Character); 
 
-    function Creer_Dictionnaire_Binaire(Nom_Fichier: String) return Dictionnaire;
+    -- Contruire un dictionnaire à partir de la tete d'un fichier
+    procedure Creer_Dictionnaire_Binaire(D: out Dictionnaire; 
+                    Flux_Tmp : in out Ada.Streams.Stream_IO.Stream_Access) ;
+        
 
 private
 

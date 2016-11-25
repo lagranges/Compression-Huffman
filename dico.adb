@@ -93,7 +93,16 @@ package body Dico is
         end loop;
         return F; 
     end Ajouter; 
-
+    
+    function Creer_Tab_Dictionnaire(D: in Dictionnaire ) return
+Tab_Dictionnaire is
+        Tab : Tab_Dictionnaire;
+    begin
+        for i in Tab'Range loop
+            Tab(i) := Traduire(D,i);
+        end loop;
+        return Tab;
+    end Creer_Tab_Dictionnaire;
 
 end Dico;  
    

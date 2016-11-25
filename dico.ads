@@ -6,7 +6,9 @@ with Code_Binaire; use Code_Binaire;
 package Dico is
 
     type Dictionnaire is private;
-
+    
+    type Tab_Dictionnaire is array (Character'First..Character'Last) of Code;
+    
     Erreur_Sans_Existe : Exception;
 
     function Creer_Dictionnaire return Dictionnaire;
@@ -26,6 +28,8 @@ package Dico is
     
     function  Ajouter(D: in Dictionnaire; E: in Dictionnaire) return Dictionnaire;
 
+    function Creer_Tab_Dictionnaire(D: in Dictionnaire ) return
+Tab_Dictionnaire;
 private
     type Cellule;    
 
