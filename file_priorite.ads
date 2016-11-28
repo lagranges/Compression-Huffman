@@ -1,6 +1,6 @@
 -- file_priorite.ads
--- File_priorite: une liste chainée trié (l'élement le plus prioriaire au début)
--- Policy de Sorti d'un élement: sotir l'élement le plus prorité = le premiere l'element
+-- File_priorite: une liste chainée trié (l'élement le moins prioriaire au début)
+-- Policy de Sorti d'un élement: sotir l'élement le moins prorité = le premiere l'element
 -- Exception sur Entrer/Sortir
 
 generic 
