@@ -13,7 +13,7 @@ procedure Test_Arbre is
 
     A : Arbre;
     D : Dictionnaire;
-
+    T : Tableau_Character;
 
 begin
     A := Arbre_Vide;
@@ -27,10 +27,10 @@ begin
     Liberer_Arbre(A);
     Afficher_Info(A); 
     
-    A := Creer_Arbre("a.txt");   
-    Afficher(;
+    Creer_Arbre(A,"a.txt",T);   
+    Afficher(A);
 
-    D := Creer_Dictionnaire_Text("a.txt");
+    Creer_Dictionnaire_Text(D,"a.txt",T);
     Afficher(D); 
 end Test_Arbre;
 
