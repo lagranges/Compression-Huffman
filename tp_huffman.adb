@@ -5,11 +5,11 @@ use Ada.Text_IO, Ada.Integer_Text_Io ,Code_binaire , huffman, dico, Ada.Streams.
 
 procedure TP_Huffman is
 
-        procedure Open_Fichier(Fichier :out Ada.Streams.Stream_IO.File_Type; Flux: out Stream_Access; Nom_Fichier: in String ) is
-        begin
-                Open(Fichier,In_File,Nom_Fichier);
-                Flux := Stream(Fichier);
-        end Open_fichier;
+    procedure Open_Fichier(Fichier :out Ada.Streams.Stream_IO.File_Type; Flux: out Stream_Access; Nom_Fichier: in String ) is
+    begin
+        Open(Fichier,In_File,Nom_Fichier);
+        Flux := Stream(Fichier);
+    end Open_fichier;
 
     procedure Compression(Nom_Fichier :in String; Nom_Fichier_Compresse : in String) is
 
