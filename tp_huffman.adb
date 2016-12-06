@@ -82,7 +82,7 @@ procedure TP_Huffman is
 
     end Compression;
 
-
+    -- La fonction décompresse d'un fichier compressé à un fichier textuel
     procedure Decompression(Nom_Fichier: in String; Nom_Fichier_Decompresse : in String) is
 
         -- Traduire de code à text et ecrire
@@ -149,10 +149,13 @@ begin
             Put("Nombre d'arguments insuffisant, il en faut 3 exactement");
         end if;
         exception
+            -- Si le fichier n'est pas exist
             when Ada.IO_Exceptions.Name_Error =>
             Put_Line("Le fichier de text n'est pas exist");
             return;
+            -- Si le fichier qu'on a besoin de compresser n'est pas un fichier compressé
+            -- ou si le fichier que on a bessoin de décompresser n'est pas en textuel
             when others =>
-            Put_Line("Ne peux pas compressier ce fichier");
+            Put_Line("Ne peux pas compressier/decompresser ce fichier");
             return;
 end TP_Huffman;
