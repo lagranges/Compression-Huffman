@@ -1,0 +1,6 @@
+# Fichier d'object
+*.o
+# Fichier informative d'Ada
+*.ali
+# Fichier de Vim
+*.swp
